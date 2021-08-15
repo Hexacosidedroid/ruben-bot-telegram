@@ -1,5 +1,6 @@
 package ru.cib.rubenbottelegram
 
+import org.apache.commons.lang3.StringUtils
 import org.springframework.stereotype.Component
 
 @Component
@@ -26,8 +27,8 @@ class Utils {
             .replace("*", "\\*")
 
     fun cutToMaxMessageLength(text: String) =
-        if (text.length >= 4096)
-            text.substring(0, 4095)
+        if (text.length > 4096)
+            text.chunked(4096)
         else
-            text
+            listOf(text)
 }

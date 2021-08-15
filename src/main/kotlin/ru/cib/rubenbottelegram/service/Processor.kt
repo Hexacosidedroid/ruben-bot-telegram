@@ -26,7 +26,7 @@ class Processor(
                     String::class.java
                 ).body
                 if (!postResult.isNullOrBlank()) {
-                    postResult = utils.formatReservedCharacter(postResult)
+                    postResult = utils.formatReservedCharacter(postResult.trim())
                     utils.cutToMaxMessageLength(postResult)
                 } else
                     throw Exception("Post request returned empty response")
@@ -38,7 +38,7 @@ class Processor(
                     String::class.java
                 ).body
                 if (!getResult.isNullOrBlank()) {
-                    getResult = utils.formatReservedCharacter(getResult)
+                    getResult = utils.formatReservedCharacter(getResult.trim())
                     utils.cutToMaxMessageLength(getResult)
                 } else
                     throw Exception("Get request returned empty response")
@@ -48,7 +48,7 @@ class Processor(
                 RestTemplate().delete(
                     URI(requestParamsArray[1])
                 )
-                "OK"
+                listOf("OK")
             }
             "PUT" -> {
                 logger.debug("[$sessionId] Starting to send PUT request to ${requestParamsArray[1]}")
@@ -56,7 +56,7 @@ class Processor(
                     URI(requestParamsArray[1]),
                     requestParamsArray[2]
                 )
-                "OK"
+                listOf("OK")
             }
             else -> {
                 throw Exception("This http method is not allowed!!!")
@@ -74,5 +74,6 @@ class Processor(
         SendMessage("$chatId", response).apply {
             enableMarkdownV2(true)
             replyToMessageId = messageId
+            disableWebPagePreview = false
         }
 }
