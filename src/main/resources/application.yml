@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: ruben-bot
+
+server:
+  port: 9080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  config: "classpath:log4j2.yml"
+
+bot:
+  name: ${BOT_NAME}
+  token: ${BOT_TOKEN}
