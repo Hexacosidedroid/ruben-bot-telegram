@@ -35,13 +35,15 @@ class RubenBotService(
                 val chatId = message.chatId
                 val messageId = message.messageId
                 logger.debug("[$sessionGuid] Chat started for id: $chatId")
-                val response = when (val text = message.text) {
-                    "/start" -> "Welcome\\! This bot designed for send http requests from telegram"
-                    "/help" -> "[Post/Get/Delete/Put] [URL] [Request]"
+                val chunkedResponse = when (val text = message.text) {
+                    "/start" -> mutableListOf("Welcome\\! This bot designed for send http requests from telegram")
+                    "/help" -> mutableListOf("\\[Post/Get/Delete/Put\\] \\[URL\\] \\[Request\\]")
                     else -> processor.processIncomingText(text, sessionGuid)
                 }
                 logger.debug("[$sessionGuid] Forming response message and sending back")
-                execute(processor.buildResponseMessage(chatId, messageId, response))
+                chunkedResponse.forEach {
+                    execute(processor.buildResponseMessage(chatId, messageId, it))
+                }
             } else
                 throw Exception("Message is empty!!!")
         } catch (e: Exception) {
